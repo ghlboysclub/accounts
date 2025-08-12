@@ -1,4 +1,3 @@
-// frontend/src/pages/Dashboard.jsx - Updated with real API integration
 import React, { useState, useEffect } from 'react';
 import { 
   AppleButton, 
@@ -39,14 +38,12 @@ const Dashboard = () => {
     description: ''
   });
 
-  // Data states
   const [kpiData, setKpiData] = useState([]);
   const [clients, setClients] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
 
   const { success, error, warning, info, NotificationContainer } = useAppleNotification();
 
-  // Load dashboard data
   useEffect(() => {
     loadDashboardData();
   }, []);
@@ -54,15 +51,12 @@ const Dashboard = () => {
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
-      
-      // Parallel API calls for better performance
       const [statsResponse, clientsResponse, transactionsResponse] = await Promise.all([
         dashboardAPI.getStats(),
         clientsAPI.getAll({ limit: 10, sort: 'createdAt', order: 'desc' }),
         dashboardAPI.getRecentTransactions(5)
       ]);
 
-      // Transform stats data for KPI cards
       const transformedKPI = [
         {
           title: 'Total Revenue',
@@ -127,15 +121,10 @@ const Dashboard = () => {
       };
 
       const newClient = await clientsAPI.create(clientData);
-      
-      // Update local state
       setClients([newClient, ...clients]);
       setIsAddModalOpen(false);
       setFormData({ name: '', email: '', amount: '', description: '' });
-      
       success('Client added successfully!');
-      
-      // Refresh stats
       loadDashboardData();
 
     } catch (err) {
@@ -148,15 +137,10 @@ const Dashboard = () => {
   const handleDeleteClient = async () => {
     try {
       await clientsAPI.delete(selectedClient.id);
-      
-      // Update local state
       setClients(clients.filter(client => client.id !== selectedClient.id));
       setIsDeleteModalOpen(false);
       setSelectedClient(null);
-      
       success('Client deleted successfully!');
-      
-      // Refresh stats
       loadDashboardData();
 
     } catch (err) {
@@ -168,7 +152,6 @@ const Dashboard = () => {
 
   const handleEditClient = async (index, client) => {
     try {
-      // Pre-populate form with existing data
       setFormData({
         name: client.name || '',
         email: client.email || '',
@@ -198,7 +181,6 @@ const Dashboard = () => {
     }
   };
 
-  // Transform clients data for table
   const tableData = clients.map(client => ({
     id: client.id,
     name: client.name || 'N/A',
@@ -225,21 +207,18 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Header */}
       <div className="bg-white/50 backdrop-blur-sm border-b border-gray-200/50 px-8 py-6">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-600 mt-1">Welcome back! Here's your financial overview</p>
           </div>
-          
           <div className="flex items-center space-x-4">
             <AppleInput
               placeholder="Search clients..."
               icon={Search}
               className="w-80"
               onChange={(e) => {
-                // Implement real-time search
                 if (e.target.value.length > 2) {
                   clientsAPI.search(e.target.value)
                     .then(results => setClients(results.data || results))
@@ -249,7 +228,6 @@ const Dashboard = () => {
                 }
               }}
             />
-            
             <AppleButton
               variant="ghost"
               icon={RefreshCw}
@@ -257,7 +235,6 @@ const Dashboard = () => {
             >
               Refresh
             </AppleButton>
-            
             <AppleButton
               variant="primary"
               icon={Plus}
@@ -270,7 +247,6 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto p-8">
-        {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {kpiData.map((kpi, index) => (
             <AppleCard key={index} hoverable>
@@ -290,7 +266,6 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Clients Table */}
         <AppleTable
           headers={tableHeaders}
           data={tableData}
@@ -304,12 +279,9 @@ const Dashboard = () => {
           itemsPerPage={10}
         />
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <AppleCard hoverable onClick={() => {
-            // Navigate to analytics page or generate report
             info('Generating monthly report...');
-            // Add your report generation logic here
           }}>
             <div className="text-center p-4">
               <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -319,9 +291,7 @@ const Dashboard = () => {
               <p className="text-gray-600">Generate comprehensive financial report</p>
             </div>
           </AppleCard>
-
           <AppleCard hoverable onClick={() => {
-            // Navigate to calendar or booking system
             warning('Calendar integration coming soon!');
           }}>
             <div className="text-center p-4">
@@ -332,11 +302,8 @@ const Dashboard = () => {
               <p className="text-gray-600">Book consultation with clients</p>
             </div>
           </AppleCard>
-
           <AppleCard hoverable onClick={() => {
-            // Implement data backup functionality
             success('Data backup initiated!');
-            // Add your backup logic here
           }}>
             <div className="text-center p-4">
               <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -349,7 +316,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Add Client Modal */}
       <AppleModal
         isOpen={isAddModalOpen}
         onClose={() => {
@@ -366,36 +332,32 @@ const Dashboard = () => {
             placeholder="Enter client name"
             icon={User}
             value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
           />
-          
           <AppleInput
             label="Email Address"
             type="email"
             placeholder="client@example.com"
             icon={Mail}
             value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
           />
-          
           <AppleInput
             label="Initial Amount"
             type="number"
             placeholder="0.00"
             icon={DollarSign}
             value={formData.amount}
-            onChange={(e) => setFormData({...formData, amount: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
           />
-          
           <AppleInput
             label="Description"
             placeholder="Additional notes about the client..."
             value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
-          
           <div className="flex items-center justify-end space-x-3 pt-4">
             <AppleButton
               variant="secondary"
@@ -417,7 +379,6 @@ const Dashboard = () => {
         </div>
       </AppleModal>
 
-      {/* Delete Confirmation Modal */}
       <AppleConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => {
@@ -432,7 +393,6 @@ const Dashboard = () => {
         type="error"
       />
 
-      {/* Notification Container */}
       <NotificationContainer />
     </div>
   );
