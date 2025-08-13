@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  CreditCard, 
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
+  CreditCard,
   PieChart,
   BarChart3,
   ArrowUpRight,
@@ -14,6 +14,7 @@ import {
   Download,
   RefreshCw
 } from 'lucide-react';
+import { AppleButton, AppleCard } from '../components/ui';
 
 const AppleAnalyticsDashboard = () => {
   const [timeRange, setTimeRange] = useState('30d');
@@ -118,32 +119,35 @@ const AppleAnalyticsDashboard = () => {
             </div>
             
             {/* Action Buttons */}
-            <button
+            <AppleButton
               onClick={handleRefresh}
               disabled={isLoading}
-              className="p-3 bg-white/70 backdrop-blur-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+              variant="secondary"
+              icon={RefreshCw}
             >
-              <RefreshCw className={`w-5 h-5 text-gray-600 ${isLoading ? 'animate-spin' : ''}`} />
-            </button>
+              {isLoading ? 'Refreshing...' : 'Refresh'}
+            </AppleButton>
             
-            <button className="flex items-center space-x-2 bg-blue-500 text-white px-6 py-3 rounded-2xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200">
-              <Download className="w-5 h-5" />
-              <span className="font-semibold">Export</span>
-            </button>
+            <AppleButton
+              variant="primary"
+              icon={Download}
+            >
+              Export
+            </AppleButton>
           </div>
         </div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {kpiData.map((kpi, index) => (
-            <div key={index} className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-gray-200 hover:shadow-xl transition-all duration-300">
+            <AppleCard key={index} hoverable={true}>
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-2xl bg-${kpi.color}-100`}>
                   <kpi.icon className={`w-6 h-6 text-${kpi.color}-600`} />
                 </div>
                 <div className={`flex items-center space-x-1 ${kpi.trend === 'up' ? 'text-emerald-500' : 'text-red-500'}`}>
-                  {kpi.trend === 'up' ? 
-                    <ArrowUpRight className="w-4 h-4" /> : 
+                  {kpi.trend === 'up' ?
+                    <ArrowUpRight className="w-4 h-4" /> :
                     <ArrowDownLeft className="w-4 h-4" />
                   }
                   <span className="text-sm font-semibold">{kpi.change}</span>
@@ -152,14 +156,14 @@ const AppleAnalyticsDashboard = () => {
               <h3 className="text-3xl font-bold text-gray-900 mb-1">{kpi.value}</h3>
               <p className="text-gray-600 text-sm">{kpi.title}</p>
               <p className="text-xs text-gray-400 mt-1">{kpi.period}</p>
-            </div>
+            </AppleCard>
           ))}
         </div>
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Revenue Chart */}
-          <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-gray-200">
+          <AppleCard>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900">Revenue & Profit Trends</h3>
               <div className="flex items-center space-x-4 text-sm">
@@ -181,13 +185,13 @@ const AppleAnalyticsDashboard = () => {
                   <div key={index} className="flex flex-col items-center space-y-2 flex-1">
                     <div className="relative w-full max-w-12 flex flex-col items-center space-y-1">
                       {/* Revenue Bar */}
-                      <div 
+                      <div
                         className="w-6 bg-blue-500 rounded-t-lg transition-all duration-500 hover:bg-blue-600"
                         style={{ height: `${(data.revenue / 250000) * 180}px` }}
                         title={`Revenue: $${data.revenue.toLocaleString()}`}
                       ></div>
                       {/* Profit Bar */}
-                      <div 
+                      <div
                         className="w-6 bg-emerald-500 rounded-t-lg transition-all duration-500 hover:bg-emerald-600"
                         style={{ height: `${(data.profit / 250000) * 180}px` }}
                         title={`Profit: $${data.profit.toLocaleString()}`}
@@ -198,10 +202,10 @@ const AppleAnalyticsDashboard = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </AppleCard>
 
           {/* Top Clients */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-gray-200">
+          <AppleCard>
             <h3 className="text-xl font-bold text-gray-900 mb-6">Top Clients</h3>
             <div className="space-y-4">
               {topClients.map((client, index) => (
@@ -222,11 +226,11 @@ const AppleAnalyticsDashboard = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </AppleCard>
         </div>
 
         {/* Expense Categories */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-gray-200">
+        <AppleCard>
           <h3 className="text-xl font-bold text-gray-900 mb-6">Expense Categories</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {expenseCategories.map((expense, index) => (
@@ -238,7 +242,7 @@ const AppleAnalyticsDashboard = () => {
                 
                 {/* Progress Bar */}
                 <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <div 
+                  <div
                     className={`h-full ${expense.color} transition-all duration-500 rounded-full`}
                     style={{ width: `${expense.percentage}%` }}
                   ></div>
@@ -248,7 +252,7 @@ const AppleAnalyticsDashboard = () => {
               </div>
             ))}
           </div>
-        </div>
+        </AppleCard>
       </div>
     </div>
   );

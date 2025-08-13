@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Building, 
+import {
+  Plus,
+  Search,
+  Filter,
+  Edit,
+  Trash2,
+  Eye,
+  Mail,
+  Phone,
+  MapPin,
+  Building,
   User,
   Users,
   Calendar,
@@ -21,6 +21,11 @@ import {
   Save,
   AlertTriangle
 } from 'lucide-react';
+import {
+  AppleButton,
+  AppleInput,
+  AppleCard
+} from '../components/ui';
 
 // Sample client data - replace with your API data
 const sampleClients = [
@@ -330,26 +335,28 @@ const Clients = () => {
           </p>
         </div>
         <div className="mt-4 sm:mt-0 flex space-x-3">
-          <button 
+          <AppleButton
+            variant="secondary"
+            size="medium"
+            icon={Download}
             onClick={exportClientsToCSV}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            <Download size={16} className="mr-2" />
             Export CSV
-          </button>
-          <button 
+          </AppleButton>
+          <AppleButton
+            variant="primary"
+            size="medium"
+            icon={Plus}
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
           >
-            <Plus size={16} className="mr-2" />
             Add Client
-          </button>
+          </AppleButton>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Users className="h-8 w-8 text-blue-600" />
@@ -359,8 +366,8 @@ const Clients = () => {
               <p className="text-2xl font-bold text-gray-900">{clients.length}</p>
             </div>
           </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        </AppleCard>
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <DollarSign className="h-8 w-8 text-green-600" />
@@ -372,8 +379,8 @@ const Clients = () => {
               </p>
             </div>
           </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        </AppleCard>
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Building className="h-8 w-8 text-purple-600" />
@@ -385,8 +392,8 @@ const Clients = () => {
               </p>
             </div>
           </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        </AppleCard>
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Calendar className="h-8 w-8 text-orange-600" />
@@ -397,31 +404,28 @@ const Clients = () => {
                 {clients.filter(c => {
                   const joinDate = new Date(c.joinDate);
                   const thisMonth = new Date();
-                  return joinDate.getMonth() === thisMonth.getMonth() && 
+                  return joinDate.getMonth() === thisMonth.getMonth() &&
                          joinDate.getFullYear() === thisMonth.getFullYear();
                 }).length}
               </p>
             </div>
           </div>
-        </div>
+        </AppleCard>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow">
+      <AppleCard>
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search clients by name, email, company, or industry..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+              <AppleInput
+                type="text"
+                placeholder="Search clients by name, email, company, or industry..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                icon={Search}
+              />
             </div>
 
             {/* Status Filter */}
@@ -429,7 +433,7 @@ const Clients = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -447,7 +451,7 @@ const Clients = () => {
                   setSortBy(field);
                   setSortOrder(order);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="name-asc">Name A-Z</option>
                 <option value="name-desc">Name Z-A</option>
@@ -575,27 +579,27 @@ const Clients = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center space-x-2">
-                      <button
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Eye}
                         onClick={() => openViewModal(client)}
-                        className="text-gray-400 hover:text-gray-600 p-1"
                         title="View Details"
-                      >
-                        <Eye size={16} />
-                      </button>
-                      <button
+                      />
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Edit}
                         onClick={() => openEditModal(client)}
-                        className="text-blue-600 hover:text-blue-900 p-1"
                         title="Edit Client"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
+                      />
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Trash2}
                         onClick={() => handleDeleteClient(client.id)}
-                        className="text-red-600 hover:text-red-900 p-1"
                         title="Delete Client"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      />
                     </div>
                   </td>
                 </tr>
@@ -615,19 +619,20 @@ const Clients = () => {
               </p>
               {!searchQuery && statusFilter === 'all' && (
                 <div className="mt-6">
-                  <button
+                  <AppleButton
+                    variant="primary"
+                    size="medium"
+                    icon={Plus}
                     onClick={() => setIsAddModalOpen(true)}
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
                   >
-                    <Plus size={16} className="mr-2" />
                     Add Your First Client
-                  </button>
+                  </AppleButton>
                 </div>
               )}
             </div>
           )}
         </div>
-      </div>
+      </AppleCard>
 
       {/* Add Client Modal */}
       {isAddModalOpen && (
@@ -635,79 +640,66 @@ const Clients = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Add New Client</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => {
                   setIsAddModalOpen(false);
                   resetForm();
                 }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Client Name <span className="text-red-500">*</span>
-                </label>
-                <input
+                <AppleInput
+                  label="Client Name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter client name"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email <span className="text-red-500">*</span>
-                </label>
-                <input
+                <AppleInput
+                  label="Email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter email address"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone
-                </label>
-                <input
+                <AppleInput
+                  label="Phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter phone number"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Company
-                </label>
-                <input
+                <AppleInput
+                  label="Company"
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({...formData, company: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter company name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Contact Person
-                </label>
-                <input
+                <AppleInput
+                  label="Contact Person"
                   type="text"
                   value={formData.contactPerson}
                   onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter contact person name"
                 />
               </div>
@@ -719,7 +711,7 @@ const Clients = () => {
                 <select
                   value={formData.industry}
                   onChange={(e) => setFormData({...formData, industry: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
                 >
                   <option value="">Select industry</option>
                   <option value="Technology">Technology</option>
@@ -737,49 +729,45 @@ const Clients = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address
-                </label>
-                <textarea
+                <AppleInput
+                  label="Address"
+                  type="textarea"
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter full address"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notes
-                </label>
-                <textarea
+                <AppleInput
+                  label="Notes"
+                  type="textarea"
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter any additional notes"
                 />
               </div>
             </div>
 
             <div className="flex justify-end space-x-3">
-              <button
+              <AppleButton
+                variant="secondary"
+                size="medium"
                 onClick={() => {
                   setIsAddModalOpen(false);
                   resetForm();
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Cancel
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="primary"
+                size="medium"
                 onClick={handleAddClient}
                 disabled={!formData.name || !formData.email}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add Client
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>
@@ -791,51 +779,44 @@ const Clients = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Edit Client</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => {
                   setIsEditModalOpen(false);
                   resetForm();
                 }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Client Name <span className="text-red-500">*</span>
-                </label>
-                <input
+                <AppleInput
+                  label="Client Name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email <span className="text-red-500">*</span>
-                </label>
-                <input
+                <AppleInput
+                  label="Email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone
-                </label>
-                <input
+                <AppleInput
+                  label="Phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -846,7 +827,7 @@ const Clients = () => {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({...formData, status: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
@@ -855,26 +836,20 @@ const Clients = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Company
-                </label>
-                <input
+                <AppleInput
+                  label="Company"
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({...formData, company: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Contact Person
-                </label>
-                <input
+                <AppleInput
+                  label="Contact Person"
                   type="text"
                   value={formData.contactPerson}
                   onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -885,7 +860,7 @@ const Clients = () => {
                 <select
                   value={formData.industry}
                   onChange={(e) => setFormData({...formData, industry: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
                 >
                   <option value="">Select industry</option>
                   <option value="Technology">Technology</option>
@@ -903,47 +878,43 @@ const Clients = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address
-                </label>
-                <textarea
+                <AppleInput
+                  label="Address"
+                  type="textarea"
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notes
-                </label>
-                <textarea
+                <AppleInput
+                  label="Notes"
+                  type="textarea"
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div className="flex justify-end space-x-3">
-              <button
+              <AppleButton
+                variant="secondary"
+                size="medium"
                 onClick={() => {
                   setIsEditModalOpen(false);
                   resetForm();
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Cancel
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="primary"
+                size="medium"
                 onClick={handleEditClient}
                 disabled={!formData.name || !formData.email}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Save Changes
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>
@@ -955,12 +926,12 @@ const Clients = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-medium text-gray-900">Client Details</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => setIsViewModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="space-y-6">
@@ -1061,21 +1032,23 @@ const Clients = () => {
             </div>
 
             <div className="flex justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
-              <button
+              <AppleButton
+                variant="primary"
+                size="medium"
                 onClick={() => {
                   setIsViewModalOpen(false);
                   openEditModal(selectedClient);
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
               >
                 Edit Client
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="secondary"
+                size="medium"
                 onClick={() => setIsViewModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Close
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>

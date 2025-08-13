@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowLeft, Search, Building2 } from 'lucide-react';
+import { AppleButton } from '../components/ui';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -50,21 +51,23 @@ const NotFound = () => {
 
           {/* Actions */}
           <div className="space-y-3">
-            <button
+            <AppleButton
               onClick={() => navigate('/dashboard')}
-              className="w-full btn btn-primary flex items-center justify-center"
+              variant="primary"
+              icon={Home}
+              className="w-full"
             >
-              <Home className="h-4 w-4 mr-2" />
               Go to Dashboard
-            </button>
+            </AppleButton>
             
-            <button
+            <AppleButton
               onClick={() => navigate(-1)}
-              className="w-full btn btn-secondary flex items-center justify-center"
+              variant="secondary"
+              icon={ArrowLeft}
+              className="w-full"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
               Go Back
-            </button>
+            </AppleButton>
           </div>
 
           {/* Help */}

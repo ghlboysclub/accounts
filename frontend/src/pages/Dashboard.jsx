@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// frontend/src/pages/Dashboard.jsx - Working version without API
+import React, { useState } from 'react';
 import { 
   AppleButton, 
   AppleInput, 
@@ -8,11 +9,6 @@ import {
   AppleConfirmModal,
   useAppleNotification 
 } from '../components/ui';
-import { 
-  dashboardAPI, 
-  clientsAPI, 
-  handleApiError 
-} from '../utils/api';
 import { 
   Plus, 
   Search, 
@@ -27,7 +23,6 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -38,131 +33,87 @@ const Dashboard = () => {
     description: ''
   });
 
-  const [kpiData, setKpiData] = useState([]);
-  const [clients, setClients] = useState([]);
-  const [recentTransactions, setRecentTransactions] = useState([]);
+  // Sample data - no API calls needed
+  const [clients, setClients] = useState([
+    { id: 1, name: 'Apple Inc.', email: 'contact@apple.com', amount: '$45,230', status: 'Active', lastTransaction: '2024-08-12' },
+    { id: 2, name: 'Microsoft Corp.', email: 'billing@microsoft.com', amount: '$38,920', status: 'Active', lastTransaction: '2024-08-11' },
+    { id: 3, name: 'Google LLC', email: 'payments@google.com', amount: '$32,180', status: 'Pending', lastTransaction: '2024-08-10' }
+  ]);
+
+  const kpiData = [
+    {
+      title: 'Total Revenue',
+      value: '$124,590',
+      change: '+12.5%',
+      trend: 'up',
+      icon: DollarSign,
+      color: 'emerald'
+    },
+    {
+      title: 'Active Clients',
+      value: '1,248',
+      change: '+3.2%',
+      trend: 'up',
+      icon: Users,
+      color: 'blue'
+    },
+    {
+      title: 'Growth Rate',
+      value: '23.4%',
+      change: '+5.1%',
+      trend: 'up',
+      icon: TrendingUp,
+      color: 'purple'
+    },
+    {
+      title: 'Transactions',
+      value: '4,892',
+      change: '+8.1%',
+      trend: 'up',
+      icon: CreditCard,
+      color: 'orange'
+    }
+  ];
 
   const { success, error, warning, info, NotificationContainer } = useAppleNotification();
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
-    try {
-      setIsLoading(true);
-      const [statsResponse, clientsResponse, transactionsResponse] = await Promise.all([
-        dashboardAPI.getStats(),
-        clientsAPI.getAll({ limit: 10, sort: 'createdAt', order: 'desc' }),
-        dashboardAPI.getRecentTransactions(5)
-      ]);
-
-      const transformedKPI = [
-        {
-          title: 'Total Revenue',
-          value: `$${statsResponse.totalRevenue?.toLocaleString() || '0'}`,
-          change: `+${statsResponse.revenueGrowth || 0}%`,
-          trend: (statsResponse.revenueGrowth || 0) >= 0 ? 'up' : 'down',
-          icon: DollarSign,
-          color: 'emerald'
-        },
-        {
-          title: 'Active Clients',
-          value: statsResponse.totalClients?.toLocaleString() || '0',
-          change: `+${statsResponse.clientGrowth || 0}%`,
-          trend: (statsResponse.clientGrowth || 0) >= 0 ? 'up' : 'down',
-          icon: Users,
-          color: 'blue'
-        },
-        {
-          title: 'Growth Rate',
-          value: `${statsResponse.growthRate || 0}%`,
-          change: `+${statsResponse.growthChange || 0}%`,
-          trend: (statsResponse.growthChange || 0) >= 0 ? 'up' : 'down',
-          icon: TrendingUp,
-          color: 'purple'
-        },
-        {
-          title: 'Transactions',
-          value: statsResponse.totalTransactions?.toLocaleString() || '0',
-          change: `+${statsResponse.transactionGrowth || 0}%`,
-          trend: (statsResponse.transactionGrowth || 0) >= 0 ? 'up' : 'down',
-          icon: CreditCard,
-          color: 'orange'
-        }
-      ];
-
-      setKpiData(transformedKPI);
-      setClients(clientsResponse.data || clientsResponse);
-      setRecentTransactions(transactionsResponse.data || transactionsResponse);
-
-    } catch (err) {
-      handleApiError(err, (type, message) => {
-        if (type === 'error') error(message);
-        else warning(message);
-      });
-    } finally {
-      setIsLoading(false);
+  const handleAddClient = () => {
+    if (!formData.name || !formData.email) {
+      error('Please fill in all required fields');
+      return;
     }
+
+    const newClient = {
+      id: clients.length + 1,
+      name: formData.name,
+      email: formData.email,
+      amount: `$${formData.amount || '0'}`,
+      status: 'Active',
+      lastTransaction: new Date().toISOString().split('T')[0]
+    };
+
+    setClients([...clients, newClient]);
+    setIsAddModalOpen(false);
+    setFormData({ name: '', email: '', amount: '', description: '' });
+    success('Client added successfully!');
   };
 
-  const handleRefresh = () => {
-    info('Refreshing dashboard data...');
-    loadDashboardData();
+  const handleDeleteClient = () => {
+    setClients(clients.filter(client => client.id !== selectedClient.id));
+    setIsDeleteModalOpen(false);
+    setSelectedClient(null);
+    success('Client deleted successfully!');
   };
 
-  const handleAddClient = async () => {
-    try {
-      const clientData = {
-        name: formData.name,
-        email: formData.email,
-        initialAmount: parseFloat(formData.amount) || 0,
-        description: formData.description
-      };
-
-      const newClient = await clientsAPI.create(clientData);
-      setClients([newClient, ...clients]);
-      setIsAddModalOpen(false);
-      setFormData({ name: '', email: '', amount: '', description: '' });
-      success('Client added successfully!');
-      loadDashboardData();
-
-    } catch (err) {
-      handleApiError(err, (type, message) => {
-        error(message || 'Failed to add client. Please try again.');
-      });
-    }
-  };
-
-  const handleDeleteClient = async () => {
-    try {
-      await clientsAPI.delete(selectedClient.id);
-      setClients(clients.filter(client => client.id !== selectedClient.id));
-      setIsDeleteModalOpen(false);
-      setSelectedClient(null);
-      success('Client deleted successfully!');
-      loadDashboardData();
-
-    } catch (err) {
-      handleApiError(err, (type, message) => {
-        error(message || 'Failed to delete client. Please try again.');
-      });
-    }
-  };
-
-  const handleEditClient = async (index, client) => {
-    try {
-      setFormData({
-        name: client.name || '',
-        email: client.email || '',
-        amount: client.totalAmount?.toString().replace('$', '') || '0',
-        description: client.description || ''
-      });
-      setIsAddModalOpen(true);
-      info(`Editing ${client.name}`);
-    } catch (err) {
-      error('Failed to load client data for editing.');
-    }
+  const handleEditClient = (index, client) => {
+    setFormData({
+      name: client.name,
+      email: client.email,
+      amount: client.amount.replace('$', ''),
+      description: ''
+    });
+    setIsAddModalOpen(true);
+    info(`Editing ${client.name}`);
   };
 
   const handleDeleteConfirm = (index, client) => {
@@ -170,71 +121,37 @@ const Dashboard = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const handleViewClient = async (index, client) => {
-    try {
-      const fullClient = await clientsAPI.getById(client.id);
-      info(`Viewing ${fullClient.name} - Total transactions: ${fullClient.transactionCount || 0}`);
-    } catch (err) {
-      handleApiError(err, (type, message) => {
-        warning(message || 'Could not load client details.');
-      });
-    }
+  const handleViewClient = (index, client) => {
+    info(`Viewing ${client.name} - Status: ${client.status}`);
   };
-
-  const tableData = clients.map(client => ({
-    id: client.id,
-    name: client.name || 'N/A',
-    email: client.email || 'N/A',
-    amount: client.totalAmount || '$0',
-    status: client.status || 'Active',
-    lastTransaction: client.lastTransactionDate 
-      ? new Date(client.lastTransactionDate).toLocaleDateString() 
-      : 'Never'
-  }));
 
   const tableHeaders = ['Name', 'Email', 'Amount', 'Status', 'Last Transaction'];
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Header */}
       <div className="bg-white/50 backdrop-blur-sm border-b border-gray-200/50 px-8 py-6">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-600 mt-1">Welcome back! Here's your financial overview</p>
           </div>
+          
           <div className="flex items-center space-x-4">
             <AppleInput
               placeholder="Search clients..."
               icon={Search}
               className="w-80"
-              onChange={(e) => {
-                if (e.target.value.length > 2) {
-                  clientsAPI.search(e.target.value)
-                    .then(results => setClients(results.data || results))
-                    .catch(err => console.error('Search failed:', err));
-                } else if (e.target.value === '') {
-                  loadDashboardData();
-                }
-              }}
             />
+            
             <AppleButton
               variant="ghost"
               icon={RefreshCw}
-              onClick={handleRefresh}
+              onClick={() => info('Dashboard refreshed!')}
             >
               Refresh
             </AppleButton>
+            
             <AppleButton
               variant="primary"
               icon={Plus}
@@ -247,6 +164,7 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto p-8">
+        {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {kpiData.map((kpi, index) => (
             <AppleCard key={index} hoverable>
@@ -254,9 +172,7 @@ const Dashboard = () => {
                 <div className={`p-3 rounded-2xl bg-${kpi.color}-100`}>
                   <kpi.icon className={`w-6 h-6 text-${kpi.color}-600`} />
                 </div>
-                <div className={`text-sm font-semibold ${
-                  kpi.trend === 'up' ? 'text-emerald-500' : 'text-red-500'
-                }`}>
+                <div className="text-emerald-500 text-sm font-semibold">
                   {kpi.change}
                 </div>
               </div>
@@ -266,9 +182,10 @@ const Dashboard = () => {
           ))}
         </div>
 
+        {/* Clients Table */}
         <AppleTable
           headers={tableHeaders}
-          data={tableData}
+          data={clients}
           onEdit={handleEditClient}
           onDelete={handleDeleteConfirm}
           onView={handleViewClient}
@@ -279,10 +196,9 @@ const Dashboard = () => {
           itemsPerPage={10}
         />
 
+        {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <AppleCard hoverable onClick={() => {
-            info('Generating monthly report...');
-          }}>
+          <AppleCard hoverable onClick={() => info('Generating monthly report...')}>
             <div className="text-center p-4">
               <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-blue-500" />
@@ -291,9 +207,8 @@ const Dashboard = () => {
               <p className="text-gray-600">Generate comprehensive financial report</p>
             </div>
           </AppleCard>
-          <AppleCard hoverable onClick={() => {
-            warning('Calendar integration coming soon!');
-          }}>
+
+          <AppleCard hoverable onClick={() => warning('Calendar integration coming soon!')}>
             <div className="text-center p-4">
               <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-8 h-8 text-purple-500" />
@@ -302,9 +217,8 @@ const Dashboard = () => {
               <p className="text-gray-600">Book consultation with clients</p>
             </div>
           </AppleCard>
-          <AppleCard hoverable onClick={() => {
-            success('Data backup initiated!');
-          }}>
+
+          <AppleCard hoverable onClick={() => success('Data backup initiated!')}>
             <div className="text-center p-4">
               <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="w-8 h-8 text-emerald-500" />
@@ -316,6 +230,7 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Add Client Modal */}
       <AppleModal
         isOpen={isAddModalOpen}
         onClose={() => {
@@ -332,32 +247,36 @@ const Dashboard = () => {
             placeholder="Enter client name"
             icon={User}
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
             required
           />
+          
           <AppleInput
             label="Email Address"
             type="email"
             placeholder="client@example.com"
             icon={Mail}
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
             required
           />
+          
           <AppleInput
             label="Initial Amount"
             type="number"
             placeholder="0.00"
             icon={DollarSign}
             value={formData.amount}
-            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+            onChange={(e) => setFormData({...formData, amount: e.target.value})}
           />
+          
           <AppleInput
             label="Description"
             placeholder="Additional notes about the client..."
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
           />
+          
           <div className="flex items-center justify-end space-x-3 pt-4">
             <AppleButton
               variant="secondary"
@@ -371,7 +290,6 @@ const Dashboard = () => {
             <AppleButton
               variant="primary"
               onClick={handleAddClient}
-              disabled={!formData.name || !formData.email}
             >
               Add Client
             </AppleButton>
@@ -379,6 +297,7 @@ const Dashboard = () => {
         </div>
       </AppleModal>
 
+      {/* Delete Confirmation Modal */}
       <AppleConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => {
@@ -387,12 +306,13 @@ const Dashboard = () => {
         }}
         onConfirm={handleDeleteClient}
         title="Delete Client"
-        message={`Are you sure you want to delete ${selectedClient?.name}? This action cannot be undone and will also remove all associated transactions.`}
+        message={`Are you sure you want to delete ${selectedClient?.name}? This action cannot be undone.`}
         confirmText="Delete"
         cancelText="Cancel"
         type="error"
       />
 
+      {/* Notification Container */}
       <NotificationContainer />
     </div>
   );

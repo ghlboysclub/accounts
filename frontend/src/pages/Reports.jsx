@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { AppleButton, AppleCard } from '../components/ui';
 import {
   FileText,
   Download,
@@ -150,24 +151,22 @@ const Reports = () => {
           </div>
           
           <div className="flex items-center space-x-3">
-            <button 
+            <AppleButton
               onClick={generateReport}
               disabled={isGenerating}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              variant="primary"
+              icon={RefreshCw}
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
               {isGenerating ? 'Generating...' : 'Refresh'}
-            </button>
+            </AppleButton>
             
-            <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-              <Download className="h-4 w-4 mr-2" />
+            <AppleButton variant="success" icon={Download}>
               Export PDF
-            </button>
+            </AppleButton>
             
-            <button className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-              <Share2 className="h-4 w-4 mr-2" />
+            <AppleButton variant="secondary" icon={Share2}>
               Share
-            </button>
+            </AppleButton>
           </div>
         </div>
       </div>
@@ -175,7 +174,7 @@ const Reports = () => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Report Types Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <AppleCard>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Report Types</h3>
             
             <div className="space-y-2 mb-6">
@@ -184,12 +183,13 @@ const Reports = () => {
                 const isSelected = selectedReport === report.id;
                 
                 return (
-                  <button
+                  <AppleButton
                     key={report.id}
                     onClick={() => setSelectedReport(report.id)}
+                    variant={isSelected ? "primary" : "ghost"}
                     className={`w-full flex items-center p-3 rounded-lg text-left transition-all ${
-                      isSelected 
-                        ? 'bg-blue-50 border border-blue-200 text-blue-700' 
+                      isSelected
+                        ? 'bg-blue-50 border border-blue-200 text-blue-700'
                         : 'hover:bg-gray-50 text-gray-700'
                     }`}
                   >
@@ -200,15 +200,15 @@ const Reports = () => {
                       <p className="font-medium">{report.name}</p>
                       <p className="text-xs text-gray-500">{report.description}</p>
                     </div>
-                  </button>
+                  </AppleButton>
                 );
               })}
             </div>
-
+            
             {/* Date Range Selector */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-              <select 
+              <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -220,7 +220,7 @@ const Reports = () => {
                 ))}
               </select>
             </div>
-          </div>
+          </AppleCard>
         </div>
 
         {/* Main Report Content */}
@@ -233,7 +233,7 @@ const Reports = () => {
           ) : (
             <div className="space-y-6">
               {/* Report Header */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <AppleCard>
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">
@@ -248,7 +248,7 @@ const Reports = () => {
                     <p className="font-medium text-gray-900">{new Date().toLocaleDateString()}</p>
                   </div>
                 </div>
-              </div>
+              </AppleCard>
 
               {/* Report Content */}
               {selectedReport === 'profit-loss' && <ProfitLossReport data={reportData?.profitLoss} />}
@@ -303,7 +303,7 @@ const ProfitLossReport = ({ data }) => (
     </div>
 
     {/* Revenue vs Expenses Chart */}
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <AppleCard>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue vs Expenses Trend</h3>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data?.monthlyData}>
@@ -325,10 +325,10 @@ const ProfitLossReport = ({ data }) => (
           <Area type="monotone" dataKey="expenses" stroke="#EF4444" fill="url(#colorExpenses)" strokeWidth={2} />
         </AreaChart>
       </ResponsiveContainer>
-    </div>
+    </AppleCard>
 
     {/* Expense Breakdown */}
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <AppleCard>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Expense Breakdown</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 bg-red-50 rounded-lg">
@@ -350,13 +350,13 @@ const ProfitLossReport = ({ data }) => (
           </div>
         </div>
       </div>
-    </div>
+    </AppleCard>
   </div>
 );
 
 // Balance Sheet Report Component
 const BalanceSheetReport = ({ data }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  <AppleCard>
     <h3 className="text-lg font-semibold text-gray-900 mb-6">Balance Sheet Summary</h3>
     
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -384,7 +384,7 @@ const BalanceSheetReport = ({ data }) => (
           </div>
         </div>
       </div>
-
+      
       {/* Liabilities */}
       <div className="p-6 bg-red-50 rounded-lg">
         <h4 className="font-semibold text-red-800 mb-4">Liabilities</h4>
@@ -405,7 +405,7 @@ const BalanceSheetReport = ({ data }) => (
           </div>
         </div>
       </div>
-
+      
       {/* Equity */}
       <div className="p-6 bg-blue-50 rounded-lg">
         <h4 className="font-semibold text-blue-800 mb-4">Equity</h4>
@@ -423,50 +423,52 @@ const BalanceSheetReport = ({ data }) => (
         </div>
       </div>
     </div>
-  </div>
+  </AppleCard>
 );
 
 // Cash Flow Report Component
 const CashFlowReport = ({ data }) => (
   <div className="space-y-6">
     {/* Cash Flow Summary */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <ReportCard
-        title="Operating Activities"
-        value={`${(data?.operatingActivities / 1000).toFixed(0)}K PKR`}
-        change="+5.2%"
-        positive={true}
-        icon={<DollarSign className="h-5 w-5" />}
-        color="bg-green-500"
-      />
-      <ReportCard
-        title="Investing Activities"
-        value={`${(data?.investingActivities / 1000).toFixed(0)}K PKR`}
-        change="-2.1%"
-        positive={false}
-        icon={<TrendingUp className="h-5 w-5" />}
-        color="bg-blue-500"
-      />
-      <ReportCard
-        title="Financing Activities"
-        value={`${(data?.financingActivities / 1000).toFixed(0)}K PKR`}
-        change="-1.5%"
-        positive={false}
-        icon={<Calculator className="h-5 w-5" />}
-        color="bg-orange-500"
-      />
-      <ReportCard
-        title="Net Cash Flow"
-        value={`${(data?.netCashFlow / 1000).toFixed(0)}K PKR`}
-        change="+8.7%"
-        positive={true}
-        icon={<Target className="h-5 w-5" />}
-        color="bg-purple-500"
-      />
-    </div>
+    <AppleCard>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <ReportCard
+          title="Operating Activities"
+          value={`${(data?.operatingActivities / 1000).toFixed(0)}K PKR`}
+          change="+5.2%"
+          positive={true}
+          icon={<DollarSign className="h-5 w-5" />}
+          color="bg-green-500"
+        />
+        <ReportCard
+          title="Investing Activities"
+          value={`${(data?.investingActivities / 1000).toFixed(0)}K PKR`}
+          change="-2.1%"
+          positive={false}
+          icon={<TrendingUp className="h-5 w-5" />}
+          color="bg-blue-500"
+        />
+        <ReportCard
+          title="Financing Activities"
+          value={`${(data?.financingActivities / 1000).toFixed(0)}K PKR`}
+          change="-1.5%"
+          positive={false}
+          icon={<Calculator className="h-5 w-5" />}
+          color="bg-orange-500"
+        />
+        <ReportCard
+          title="Net Cash Flow"
+          value={`${(data?.netCashFlow / 1000).toFixed(0)}K PKR`}
+          change="+8.7%"
+          positive={true}
+          icon={<Target className="h-5 w-5" />}
+          color="bg-purple-500"
+        />
+      </div>
+    </AppleCard>
 
     {/* Cash Flow Chart */}
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <AppleCard>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Cash Flow</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data?.monthlyFlow}>
@@ -479,7 +481,7 @@ const CashFlowReport = ({ data }) => (
           <Bar dataKey="net" fill="#3B82F6" name="Net Cash Flow" />
         </BarChart>
       </ResponsiveContainer>
-    </div>
+    </AppleCard>
   </div>
 );
 
@@ -488,7 +490,7 @@ const PartnerDistributionReport = ({ data }) => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Pie Chart */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <AppleCard>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribution Chart</h3>
         <ResponsiveContainer width="100%" height={300}>
           <RechartsPieChart>
@@ -509,17 +511,17 @@ const PartnerDistributionReport = ({ data }) => (
             <Tooltip formatter={(value) => [`${(value/1000).toFixed(0)}K PKR`]} />
           </RechartsPieChart>
         </ResponsiveContainer>
-      </div>
+      </AppleCard>
 
       {/* Partner Details */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <AppleCard>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Partner Details</h3>
         <div className="space-y-4">
           {data?.map((partner, index) => (
             <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center">
-                <div 
-                  className="w-4 h-4 rounded-full mr-3" 
+                <div
+                  className="w-4 h-4 rounded-full mr-3"
                   style={{backgroundColor: partner.color}}
                 ></div>
                 <div>
@@ -533,7 +535,7 @@ const PartnerDistributionReport = ({ data }) => (
             </div>
           ))}
         </div>
-      </div>
+      </AppleCard>
     </div>
   </div>
 );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, 
-  Plus, 
-  Edit, 
-  Trash2, 
+import {
+  Users,
+  Plus,
+  Edit,
+  Trash2,
   TrendingUp,
   DollarSign,
   Search,
@@ -15,6 +15,7 @@ import { apiService, apiUtils } from '../services/api';
 import { useRole } from '../contexts/AuthContext';
 import LoadingSpinner, { TableSkeleton } from '../components/common/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { AppleButton, AppleInput, AppleCard } from '../components/ui';
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
@@ -119,15 +120,14 @@ const Partners = () => {
           <h1 className="text-2xl font-bold text-gray-900">Partners</h1>
           <p className="text-gray-600 mt-1">Manage profit sharing partners</p>
         </div>
-        <button className="mt-4 sm:mt-0 btn btn-primary">
-          <Plus className="h-4 w-4 mr-2" />
+        <AppleButton variant="primary" icon={Plus}>
           Add Partner
-        </button>
+        </AppleButton>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="stat-card">
+        <AppleCard>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Partners</p>
@@ -137,9 +137,9 @@ const Partners = () => {
               <Users className="h-6 w-6 text-blue-600" />
             </div>
           </div>
-        </div>
+        </AppleCard>
 
-        <div className="stat-card">
+        <AppleCard>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Share</p>
@@ -151,9 +151,9 @@ const Partners = () => {
               <TrendingUp className="h-6 w-6 text-green-600" />
             </div>
           </div>
-        </div>
+        </AppleCard>
 
-        <div className="stat-card">
+        <AppleCard>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Earnings</p>
@@ -168,33 +168,31 @@ const Partners = () => {
               <DollarSign className="h-6 w-6 text-purple-600" />
             </div>
           </div>
-        </div>
+        </AppleCard>
       </div>
 
       {/* Search and Filter */}
-      <div className="card">
+      <AppleCard>
         <div className="card-body">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
             <div className="relative flex-1 max-w-lg">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
+              <AppleInput
                 type="text"
                 placeholder="Search partners..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-input pl-10"
+                icon={Search}
               />
             </div>
-            <button className="btn btn-secondary">
-              <Filter className="h-4 w-4 mr-2" />
+            <AppleButton variant="secondary" icon={Filter}>
               Filter
-            </button>
+            </AppleButton>
           </div>
         </div>
-      </div>
+      </AppleCard>
 
       {/* Partners Table */}
-      <div className="card">
+      <AppleCard>
         <div className="card-header">
           <h3 className="text-lg font-semibold text-gray-900">All Partners</h3>
         </div>
@@ -252,15 +250,9 @@ const Partners = () => {
                   </td>
                   <td>
                     <div className="flex items-center space-x-2">
-                      <button className="p-1 text-gray-400 hover:text-blue-600 transition-colors">
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button className="p-1 text-gray-400 hover:text-red-600 transition-colors">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                      <button className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreVertical className="h-4 w-4" />
-                      </button>
+                      <AppleButton variant="ghost" size="small" icon={Edit} />
+                      <AppleButton variant="ghost" size="small" icon={Trash2} />
+                      <AppleButton variant="ghost" size="small" icon={MoreVertical} />
                     </div>
                   </td>
                 </tr>
@@ -268,7 +260,7 @@ const Partners = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </AppleCard>
     </div>
   );
 };

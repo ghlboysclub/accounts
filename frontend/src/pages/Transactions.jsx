@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  Download, 
+import {
+  Plus,
+  Search,
+  Filter,
+  Edit,
+  Trash2,
+  Eye,
+  Download,
   Upload,
   Calendar,
   DollarSign,
@@ -21,6 +21,11 @@ import {
   Building,
   User
 } from 'lucide-react';
+import {
+  AppleButton,
+  AppleInput,
+  AppleCard
+} from '../components/ui';
 
 // Sample transaction data - replace with your API data
 const sampleTransactions = [
@@ -364,26 +369,26 @@ const Transactions = () => {
           </p>
         </div>
         <div className="mt-4 sm:mt-0 flex space-x-3">
-          <button 
+          <AppleButton
+            variant="secondary"
+            icon={Download}
             onClick={exportTransactions}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            <Download size={16} className="mr-2" />
             Export CSV
-          </button>
-          <button 
+          </AppleButton>
+          <AppleButton
+            variant="primary"
+            icon={Plus}
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
           >
-            <Plus size={16} className="mr-2" />
             Add Transaction
-          </button>
+          </AppleButton>
         </div>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <TrendingUp className="h-8 w-8 text-green-600" />
@@ -393,9 +398,9 @@ const Transactions = () => {
               <p className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalIncome)}</p>
             </div>
           </div>
-        </div>
+        </AppleCard>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <TrendingDown className="h-8 w-8 text-red-600" />
@@ -405,9 +410,9 @@ const Transactions = () => {
               <p className="text-2xl font-bold text-red-600">{formatCurrency(summary.totalExpenses)}</p>
             </div>
           </div>
-        </div>
+        </AppleCard>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <DollarSign className="h-8 w-8 text-blue-600" />
@@ -419,9 +424,9 @@ const Transactions = () => {
               </p>
             </div>
           </div>
-        </div>
+        </AppleCard>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <AppleCard>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Calendar className="h-8 w-8 text-purple-600" />
@@ -431,46 +436,43 @@ const Transactions = () => {
               <p className="text-2xl font-bold text-purple-600">{formatCurrency(summary.pendingAmount)}</p>
             </div>
           </div>
-        </div>
+        </AppleCard>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow">
+      <AppleCard>
         <div className="p-6 border-b border-gray-200">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             {/* Search */}
             <div className="lg:col-span-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search transactions..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+              <AppleInput
+                type="text"
+                placeholder="Search transactions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                icon={Search}
+              />
             </div>
-
+            
             {/* Type Filter */}
             <div>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="all">All Types</option>
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
               </select>
             </div>
-
+            
             {/* Status Filter */}
             <div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="all">All Status</option>
                 <option value="completed">Completed</option>
@@ -479,13 +481,13 @@ const Transactions = () => {
                 <option value="draft">Draft</option>
               </select>
             </div>
-
+            
             {/* Category Filter */}
             <div>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
@@ -493,13 +495,13 @@ const Transactions = () => {
                 ))}
               </select>
             </div>
-
+            
             {/* Date Range Filter */}
             <div>
               <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -510,7 +512,7 @@ const Transactions = () => {
             </div>
           </div>
         </div>
-
+        
         {/* Transaction Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -580,31 +582,31 @@ const Transactions = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center space-x-2">
-                      <button
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Eye}
                         onClick={() => openViewModal(transaction)}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <Eye size={16} />
-                      </button>
-                      <button
+                      />
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Edit}
                         onClick={() => openEditModal(transaction)}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
+                      />
+                      <AppleButton
+                        variant="ghost"
+                        size="small"
+                        icon={Trash2}
                         onClick={() => handleDeleteTransaction(transaction.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      />
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
+          
           {filteredTransactions.length === 0 && (
             <div className="text-center py-12">
               <FileText className="mx-auto h-12 w-12 text-gray-400" />
@@ -618,7 +620,7 @@ const Transactions = () => {
             </div>
           )}
         </div>
-      </div>
+      </AppleCard>
 
       {/* Add Transaction Modal */}
       {isAddModalOpen && (
@@ -626,12 +628,12 @@ const Transactions = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Add New Transaction</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -650,27 +652,21 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Amount (PKR) *
-                </label>
-                <input
+                <AppleInput
+                  label="Amount (PKR) *"
                   type="number"
                   value={formData.amount}
                   onChange={(e) => setFormData({...formData, amount: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter amount"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description *
-                </label>
-                <input
+                <AppleInput
+                  label="Description *"
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter transaction description"
                 />
               </div>
@@ -692,30 +688,24 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {formData.type === 'income' ? 'Client' : 'Vendor'}
-                </label>
-                <input
+                <AppleInput
+                  label={formData.type === 'income' ? 'Client' : 'Vendor'}
                   type="text"
                   value={formData.type === 'income' ? formData.client : formData.vendor}
                   onChange={(e) => setFormData({
-                    ...formData, 
+                    ...formData,
                     [formData.type === 'income' ? 'client' : 'vendor']: e.target.value
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder={`Enter ${formData.type === 'income' ? 'client' : 'vendor'} name`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date *
-                </label>
-                <input
+                <AppleInput
+                  label="Date *"
                   type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({...formData, date: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -751,45 +741,39 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Reference
-                </label>
-                <input
+                <AppleInput
+                  label="Reference"
                   type="text"
                   value={formData.reference}
                   onChange={(e) => setFormData({...formData, reference: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter reference number"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tags (comma separated)
-                </label>
-                <input
+                <AppleInput
+                  label="Tags (comma separated)"
                   type="text"
                   value={formData.tags}
                   onChange={(e) => setFormData({...formData, tags: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="e.g. web, development, frontend"
                 />
               </div>
             </div>
 
             <div className="flex justify-end space-x-3">
-              <button
+              <AppleButton
+                variant="secondary"
                 onClick={() => setIsAddModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Cancel
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="primary"
                 onClick={handleAddTransaction}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
               >
                 Add Transaction
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>
@@ -801,12 +785,12 @@ const Transactions = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Edit Transaction</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => setIsEditModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -825,26 +809,20 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Amount (PKR) *
-                </label>
-                <input
+                <AppleInput
+                  label="Amount (PKR) *"
                   type="number"
                   value={formData.amount}
                   onChange={(e) => setFormData({...formData, amount: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description *
-                </label>
-                <input
+                <AppleInput
+                  label="Description *"
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -880,14 +858,11 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date *
-                </label>
-                <input
+                <AppleInput
+                  label="Date *"
                   type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({...formData, date: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -907,58 +882,49 @@ const Transactions = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {formData.type === 'income' ? 'Client' : 'Vendor'}
-                </label>
-                <input
+                <AppleInput
+                  label={formData.type === 'income' ? 'Client' : 'Vendor'}
                   type="text"
                   value={formData.type === 'income' ? formData.client : formData.vendor}
                   onChange={(e) => setFormData({
-                    ...formData, 
+                    ...formData,
                     [formData.type === 'income' ? 'client' : 'vendor']: e.target.value
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Reference
-                </label>
-                <input
+                <AppleInput
+                  label="Reference"
                   type="text"
                   value={formData.reference}
                   onChange={(e) => setFormData({...formData, reference: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tags (comma separated)
-                </label>
-                <input
+                <AppleInput
+                  label="Tags (comma separated)"
                   type="text"
                   value={formData.tags}
                   onChange={(e) => setFormData({...formData, tags: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div className="flex justify-end space-x-3">
-              <button
+              <AppleButton
+                variant="secondary"
                 onClick={() => setIsEditModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Cancel
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="primary"
                 onClick={handleEditTransaction}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
               >
                 Save Changes
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>
@@ -970,12 +936,12 @@ const Transactions = () => {
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-medium text-gray-900">Transaction Details</h3>
-              <button
+              <AppleButton
+                variant="ghost"
+                size="small"
+                icon={X}
                 onClick={() => setIsViewModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
+              />
             </div>
 
             <div className="space-y-6">
@@ -1068,21 +1034,21 @@ const Transactions = () => {
             </div>
 
             <div className="flex justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
-              <button
+              <AppleButton
+                variant="primary"
                 onClick={() => {
                   setIsViewModalOpen(false);
                   openEditModal(selectedTransaction);
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
               >
                 Edit Transaction
-              </button>
-              <button
+              </AppleButton>
+              <AppleButton
+                variant="secondary"
                 onClick={() => setIsViewModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Close
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>

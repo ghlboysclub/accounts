@@ -1,6 +1,7 @@
 import React from 'react';
 import { User, Mail, Phone, Calendar, Shield, Edit } from 'lucide-react';
 import { useAuth, useRole } from '../contexts/AuthContext';
+import { AppleButton, AppleCard } from '../components/ui';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -13,15 +14,14 @@ const Profile = () => {
           <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
           <p className="text-gray-600">Manage your account information</p>
         </div>
-        <button className="btn btn-primary">
-          <Edit className="h-4 w-4 mr-2" />
+        <AppleButton variant="primary" icon={Edit}>
           Edit Profile
-        </button>
+        </AppleButton>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <div className="card">
+          <AppleCard>
             <div className="card-header">
               <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
             </div>
@@ -49,8 +49,8 @@ const Profile = () => {
                   <Shield className="h-5 w-5 text-gray-400 mr-3" />
                   <span className={`
                     inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                    ${isAdmin ? 'bg-red-100 text-red-800' : 
-                      isPartner ? 'bg-blue-100 text-blue-800' : 
+                    ${isAdmin ? 'bg-red-100 text-red-800' :
+                      isPartner ? 'bg-blue-100 text-blue-800' :
                       'bg-green-100 text-green-800'}
                   `}>
                     {user?.role}
@@ -58,11 +58,11 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </AppleCard>
         </div>
 
         <div>
-          <div className="card">
+          <AppleCard>
             <div className="card-header">
               <h3 className="text-lg font-semibold text-gray-900">Account Stats</h3>
             </div>
@@ -88,7 +88,7 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </AppleCard>
         </div>
       </div>
     </div>

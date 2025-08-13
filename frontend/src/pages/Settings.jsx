@@ -32,6 +32,7 @@ import {
   Cloud,
   RefreshCw
 } from 'lucide-react';
+import { AppleButton, AppleInput, AppleCard } from '../components/ui';
 
 const Settings = () => {
   const { user, logout } = useAuth();
@@ -217,16 +218,19 @@ const Settings = () => {
                           {(settings.profile.firstName || 'U')[0].toUpperCase()}
                         </span>
                       </div>
-                      <button className="absolute -bottom-2 -right-2 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow-lg">
-                        <Upload className="h-4 w-4" />
-                      </button>
+                      <AppleButton
+                        variant="primary"
+                        size="small"
+                        icon={Upload}
+                        className="absolute -bottom-2 -right-2 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow-lg"
+                      />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">Profile Photo</h3>
                       <p className="text-gray-600">JPG, GIF or PNG. Max size of 2MB.</p>
-                      <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                      <AppleButton variant="primary" className="mt-2">
                         Change Photo
-                      </button>
+                      </AppleButton>
                     </div>
                   </div>
 
@@ -235,61 +239,52 @@ const Settings = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                        <input
+                        <AppleInput
+                          label="First Name"
                           type="text"
                           value={settings.profile.firstName}
                           onChange={(e) => handleSimpleChange('profile', 'firstName', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
-
+                      
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                        <input
+                        <AppleInput
+                          label="Last Name"
                           type="text"
                           value={settings.profile.lastName}
                           onChange={(e) => handleSimpleChange('profile', 'lastName', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
-
+                      
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                          <input
-                            type="email"
-                            value={settings.profile.email}
-                            onChange={(e) => handleSimpleChange('profile', 'email', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
+                        <AppleInput
+                          label="Email Address"
+                          type="email"
+                          value={settings.profile.email}
+                          onChange={(e) => handleSimpleChange('profile', 'email', e.target.value)}
+                          icon={Mail}
+                        />
                       </div>
-
+                      
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                        <div className="relative">
-                          <Smartphone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                          <input
-                            type="tel"
-                            value={settings.profile.phone}
-                            onChange={(e) => handleSimpleChange('profile', 'phone', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
+                        <AppleInput
+                          label="Phone Number"
+                          type="tel"
+                          value={settings.profile.phone}
+                          onChange={(e) => handleSimpleChange('profile', 'phone', e.target.value)}
+                          icon={Smartphone}
+                        />
                       </div>
-
+                      
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
-                        <input
+                        <AppleInput
+                          label="Position"
                           type="text"
                           value={settings.profile.position}
                           onChange={(e) => handleSimpleChange('profile', 'position', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
-
+                      
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
                         <select
@@ -481,34 +476,25 @@ const Settings = () => {
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
-                          <div className="relative">
-                            <input
-                              type={showPassword ? 'text' : 'password'}
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
-                              placeholder="Enter current password"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            >
-                              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                            </button>
-                          </div>
+                          <AppleInput
+                            label="Current Password"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Enter current password"
+                            icon={showPassword ? EyeOff : Eye}
+                            onIconClick={() => setShowPassword(!showPassword)}
+                          />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
-                          <input
+                          <AppleInput
+                            label="New Password"
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter new password"
                           />
                         </div>
                       </div>
-                      <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                      <AppleButton variant="primary">
                         Update Password
-                      </button>
+                      </AppleButton>
                     </div>
                   </div>
 
@@ -578,62 +564,57 @@ const Settings = () => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
-                      <input
+                      <AppleInput
+                        label="Company Name"
                         type="text"
                         value={settings.company.name}
                         onChange={(e) => handleSimpleChange('company', 'name', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
+                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Tax ID</label>
-                      <input
+                      <AppleInput
+                        label="Tax ID"
                         type="text"
                         value={settings.company.taxId}
                         onChange={(e) => handleSimpleChange('company', 'taxId', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
+                    
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                      <textarea
+                      <AppleInput
+                        label="Address"
+                        type="textarea"
                         value={settings.company.address}
                         onChange={(e) => handleSimpleChange('company', 'address', e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
+                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                      <input
+                      <AppleInput
+                        label="Phone"
                         type="tel"
                         value={settings.company.phone}
                         onChange={(e) => handleSimpleChange('company', 'phone', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
+                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
+                      <AppleInput
+                        label="Email"
                         type="email"
                         value={settings.company.email}
                         onChange={(e) => handleSimpleChange('company', 'email', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
+                    
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
-                      <input
+                      <AppleInput
+                        label="Website"
                         type="url"
                         value={settings.company.website}
                         onChange={(e) => handleSimpleChange('company', 'website', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -698,13 +679,13 @@ const Settings = () => {
                     <p className="text-gray-600 mb-4">
                       Download a copy of all your data including transactions, reports, and settings.
                     </p>
-                    <button 
+                    <AppleButton
+                      variant="primary"
+                      icon={Download}
                       onClick={handleExportData}
-                      className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
-                      <Download className="mr-2 h-5 w-5" />
                       Export All Data
-                    </button>
+                    </AppleButton>
                   </div>
 
                   {/* Data Storage */}
@@ -770,10 +751,12 @@ const Settings = () => {
                           Permanently delete your account and all associated data. This action cannot be undone.
                           All transactions, reports, and settings will be permanently removed.
                         </p>
-                        <button className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                          <Trash2 className="mr-2 h-4 w-4" />
+                        <AppleButton
+                          variant="danger"
+                          icon={Trash2}
+                        >
                           Delete Account
-                        </button>
+                        </AppleButton>
                       </div>
                     </div>
                   </div>
@@ -789,24 +772,20 @@ const Settings = () => {
                   All changes are saved automatically
                 </div>
                 <div className="flex items-center space-x-3">
-                  <button
+                  <AppleButton
+                    variant="secondary"
                     onClick={() => setSettings({...settings})}
-                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Reset to Defaults
-                  </button>
-                  <button
+                  </AppleButton>
+                  <AppleButton
+                    variant="primary"
+                    icon={isLoading ? RefreshCw : Save}
                     onClick={handleSaveSettings}
                     disabled={isLoading}
-                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                   >
-                    {isLoading ? (
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Save className="mr-2 h-4 w-4" />
-                    )}
                     {isLoading ? 'Saving...' : 'Save Changes'}
-                  </button>
+                  </AppleButton>
                 </div>
               </div>
             </div>

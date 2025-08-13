@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, Apple, ArrowRight } from 'lucide-react';
+import { AppleButton, AppleInput } from '../../components/ui';
 
 const AppleLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,47 +49,29 @@ const AppleLoginPage = () => {
           {/* Login Form */}
           <div className="px-8 pb-8 space-y-6">
             {/* Email Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Email</label>
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-            </div>
+            <AppleInput
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+              icon={Mail}
+              placeholder="Enter your email"
+              required
+            />
 
             {/* Password Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Password</label>
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Lock className="w-5 h-5" />
-                </div>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
-                  className="w-full pl-12 pr-12 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
-                  placeholder="Enter your password"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
+            <AppleInput
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
+              icon={Lock}
+              placeholder="Enter your password"
+              required
+              showPasswordToggle={true}
+              showPassword={showPassword}
+              onShowPasswordToggle={() => setShowPassword(!showPassword)}
+            />
 
             {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
@@ -102,29 +85,26 @@ const AppleLoginPage = () => {
                 <span className="text-sm text-gray-600">Remember me</span>
               </label>
               
-              <button
+              <AppleButton
                 type="button"
+                variant="ghost"
+                size="small"
                 className="text-sm text-blue-500 hover:text-blue-600 font-semibold transition-colors"
               >
                 Forgot password?
-              </button>
+              </AppleButton>
             </div>
 
             {/* Login Button */}
-            <button
+            <AppleButton
               onClick={handleSubmit}
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 rounded-2xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="primary"
+              icon={ArrowRight}
+              className="w-full"
             >
-              {isLoading ? (
-                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </AppleButton>
 
             {/* Divider */}
             <div className="relative">
@@ -138,23 +118,25 @@ const AppleLoginPage = () => {
 
             {/* Social Login */}
             <div className="grid grid-cols-2 gap-4">
-              <button
+              <AppleButton
                 type="button"
+                variant="secondary"
                 className="flex items-center justify-center space-x-2 py-3 px-4 border border-gray-200 rounded-2xl hover:bg-gray-50 transition-all duration-200"
               >
                 <div className="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">G</span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">Google</span>
-              </button>
+              </AppleButton>
               
-              <button
+              <AppleButton
                 type="button"
+                variant="secondary"
+                icon={Apple}
                 className="flex items-center justify-center space-x-2 py-3 px-4 border border-gray-200 rounded-2xl hover:bg-gray-50 transition-all duration-200"
               >
-                <Apple className="w-5 h-5 text-gray-700" />
                 <span className="text-sm font-medium text-gray-700">Apple</span>
-              </button>
+              </AppleButton>
             </div>
           </div>
         </div>
@@ -163,9 +145,9 @@ const AppleLoginPage = () => {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <button className="text-blue-500 hover:text-blue-600 font-semibold transition-colors">
+            <AppleButton variant="ghost" size="small" className="text-blue-500 hover:text-blue-600 font-semibold transition-colors">
               Sign up
-            </button>
+            </AppleButton>
           </p>
         </div>
       </div>
