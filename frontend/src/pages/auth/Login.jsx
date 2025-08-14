@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, Apple, ArrowRight } from 'lucide-react';
 import { AppleButton, AppleInput } from '../../components/ui';
+import { useAuth } from '../../contexts/AuthContext';  // Fixed import path
 
 const AppleLoginPage = () => {
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -15,11 +17,13 @@ const AppleLoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call - replace with your actual login endpoint
-    setTimeout(() => {
-      console.log('Login attempt:', formData);
+    try {
+      await login(formData);
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handleInputChange = (field, value) => {
@@ -62,15 +66,12 @@ const AppleLoginPage = () => {
             {/* Password Input */}
             <AppleInput
               label="Password"
-              type={showPassword ? 'text' : 'password'}
+              type="password"
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
               icon={Lock}
               placeholder="Enter your password"
               required
-              showPasswordToggle={true}
-              showPassword={showPassword}
-              onShowPasswordToggle={() => setShowPassword(!showPassword)}
             />
 
             {/* Remember Me & Forgot Password */}
@@ -139,16 +140,22 @@ const AppleLoginPage = () => {
               </AppleButton>
             </div>
           </div>
-        </div>
 
-        {/* Sign Up Link */}
-        <div className="text-center mt-6">
-          <p className="text-gray-600">
-            Don't have an account?{' '}
-            <AppleButton variant="ghost" size="small" className="text-blue-500 hover:text-blue-600 font-semibold transition-colors">
-              Sign up
-            </AppleButton>
-          </p>
+          {/* Sign Up Link - Updated styling */}
+          <div className="text-center border-t border-gray-100">
+            <div className="px-8 py-6">
+              <p className="text-gray-600">
+                Don't have an account?{' '}
+                <AppleButton 
+                  variant="ghost" 
+                  size="small" 
+                  className="text-blue-500 hover:text-blue-600 font-semibold transition-colors"
+                >
+                  Sign up
+                </AppleButton>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

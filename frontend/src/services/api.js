@@ -1,4 +1,33 @@
-// frontend/src/utils/api.js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://accounts-api.ghlboysclub.workers.dev/api',
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // API utility functions
@@ -126,6 +155,29 @@ export const reportsAPI = {
   getAll: (params = {}) => apiClient.get('/api/reports', params),
   download: (reportId) => apiClient.get(`/api/reports/${reportId}/download`),
   delete: (reportId) => apiClient.delete(`/api/reports/${reportId}`),
+};
+
+// Partners API calls
+export const partnersAPI = {
+  getAll: (params = {}) => apiClient.get('/api/partners', params),
+  getById: (id) => apiClient.get(`/api/partners/${id}`),
+};
+
+// Utility functions
+export const formatCurrency = (amount, currency = 'PKR') => {
+  return new Intl.NumberFormat('en-PK', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0
+  }).format(amount);
+};
+
+export const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString('en-PK', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 };
 
 // Error handling utility

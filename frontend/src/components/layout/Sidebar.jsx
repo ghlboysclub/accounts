@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Receipt, 
-  Users, 
-  BarChart3, 
-  UserCheck, 
+import {
+  LayoutDashboard,
+  Receipt,
+  Users,
+  BarChart3,
+  UserCheck,
   Plus,
   ChevronRight,
   FolderOpen,
@@ -21,7 +21,12 @@ import {
   Target,
   Briefcase,
   Shield,
-  Bell
+  Bell,
+  DollarSign,
+  File,
+  MessageCircle,
+  Eye,
+  Clock
 } from 'lucide-react';
 
 const CompleteSidebar = ({ 
@@ -80,6 +85,20 @@ const CompleteSidebar = ({
           icon: PieChart,
           path: '/distributions',
           description: 'Profit distributions'
+        },
+        {
+          id: 'banking',
+          label: 'Banking',
+          icon: Banknote,
+          path: '/banking',
+          description: 'Bank accounts & transactions'
+        },
+        {
+          id: 'payroll',
+          label: 'Payroll',
+          icon: DollarSign,
+          path: '/payroll',
+          description: 'Employee payroll management'
         }
       ]
     },
@@ -107,6 +126,13 @@ const CompleteSidebar = ({
           icon: UserCheck,
           path: '/partners',
           description: 'Partner management'
+        },
+        {
+          id: 'advances',
+          label: 'Advances',
+          icon: Target,
+          path: '/advances',
+          description: 'Advance payments'
         }
       ]
     },
@@ -139,24 +165,21 @@ const CompleteSidebar = ({
           label: 'Calendar',
           icon: Calendar,
           path: '/calendar',
-          comingSoon: true,
           description: 'Schedule & meetings'
         },
         {
-          id: 'banking',
-          label: 'Banking',
-          icon: Banknote,
-          path: '/banking',
-          comingSoon: true,
-          description: 'Bank connections'
+          id: 'documents',
+          label: 'Documents',
+          icon: File,
+          path: '/documents',
+          description: 'File management'
         },
         {
-          id: 'advances',
-          label: 'Advances',
-          icon: Target,
-          path: '/advances',
-          comingSoon: true,
-          description: 'Advance payments'
+          id: 'communications',
+          label: 'Communications',
+          icon: MessageCircle,
+          path: '/communications',
+          description: 'Messages & notifications'
         }
       ]
     },
@@ -169,7 +192,6 @@ const CompleteSidebar = ({
           label: 'User Management',
           icon: Shield,
           path: '/users',
-          comingSoon: true,
           description: 'Manage system users',
           adminOnly: true
         },
@@ -178,19 +200,23 @@ const CompleteSidebar = ({
           label: 'Settings',
           icon: Settings,
           path: '/settings',
-          comingSoon: true,
           description: 'System configuration'
+        },
+        {
+          id: 'audit',
+          label: 'Audit Trail',
+          icon: Eye,
+          path: '/audit',
+          description: 'System activity logs'
         }
       ]
     }
   ];
 
   const handleItemClick = (item) => {
-    if (!item.comingSoon) {
-      navigate(item.path);
-      if (isMobileOpen && onCloseMobile) {
-        onCloseMobile();
-      }
+    navigate(item.path);
+    if (isMobileOpen && onCloseMobile) {
+      onCloseMobile();
     }
   };
 
@@ -201,25 +227,22 @@ const CompleteSidebar = ({
       <li key={item.id}>
         <button
           onClick={() => handleItemClick(item)}
-          disabled={item.comingSoon}
           className={`
             w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md
             transition-all duration-150 ease-in-out group relative
-            ${isActive 
-              ? 'bg-blue-50 text-blue-700 shadow-sm border-r-2 border-blue-600' 
-              : item.comingSoon
-              ? 'text-gray-400 cursor-not-allowed'
+            ${isActive
+              ? 'bg-blue-50 text-blue-700 shadow-sm border-r-2 border-blue-600'
               : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
             }
           `}
           title={isCollapsed ? item.label : item.description}
         >
-          <item.icon 
+          <item.icon
             size={20}
             className={`
               flex-shrink-0
               ${isCollapsed ? 'mx-auto' : 'mr-3'}
-              ${isActive ? 'text-blue-600' : item.comingSoon ? 'text-gray-400' : 'text-gray-500 group-hover:text-gray-700'}
+              ${isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-gray-700'}
             `}
           />
           {!isCollapsed && (
@@ -229,15 +252,10 @@ const CompleteSidebar = ({
                   <span className="truncate">{item.label}</span>
                   {item.badge && (
                     <span className={`
-                      inline-flex items-center px-1.5 py-0.5 ml-2 text-xs font-medium 
+                      inline-flex items-center px-1.5 py-0.5 ml-2 text-xs font-medium
                       text-white rounded ${item.badge.color}
                     `}>
                       {item.badge.count}
-                    </span>
-                  )}
-                  {item.comingSoon && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 ml-2 text-xs font-medium text-amber-700 bg-amber-100 rounded">
-                      Soon
                     </span>
                   )}
                 </div>
@@ -274,19 +292,19 @@ const CompleteSidebar = ({
       {/* Mobile Overlay */}
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
           onClick={onCloseMobile}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
-        fixed top-0 left-0 z-50 h-full bg-white border-r border-gray-200
-        transform transition-all duration-300 ease-in-out
+      <aside className={`
+        fixed top-0 left-0 z-50 h-screen bg-white border-r border-gray-200
+        flex flex-col flex-shrink-0
+        transition-all duration-300 ease-in-out
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:border-r
-        ${isCollapsed ? 'w-16' : 'w-72'}
-        flex flex-col
+        lg:translate-x-0 lg:relative lg:border-r
+        ${isCollapsed ? 'w-20' : 'w-72'}
       `}>
         
         {/* Header */}
@@ -378,7 +396,7 @@ const CompleteSidebar = ({
             </div>
           </div>
         )}
-      </div>
+      </aside>
     </>
   );
 };

@@ -1,28 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          charts: ['recharts'],
-          utils: ['axios', 'lucide-react', 'react-hot-toast', 'js-cookie']
-        }
-      }
+    open: true,
+    hmr: {
+      overlay: true
     }
   },
-  define: {
-    // For production API URL
-    __API_BASE_URL__: JSON.stringify('https://accounts-api.ghlboysclub.workers.dev')
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      'components': path.resolve(__dirname, 'src/components'),
+      'pages': path.resolve(__dirname, 'src/pages'),
+      'contexts': path.resolve(__dirname, 'src/contexts'),
+      'services': path.resolve(__dirname, 'src/services')
+    }
   }
 })

@@ -11,7 +11,7 @@ import {
   MoreVertical,
   Shield
 } from 'lucide-react';
-import { apiService, apiUtils } from '../services/api';
+import { partnersAPI, formatCurrency, formatDate } from '../services/api';
 import { useRole } from '../contexts/AuthContext';
 import LoadingSpinner, { TableSkeleton } from '../components/common/LoadingSpinner';
 import toast from 'react-hot-toast';
@@ -33,7 +33,7 @@ const Partners = () => {
       
       // Try to fetch from API, but don't fail if it doesn't work
       try {
-        const response = await apiService.partners.getAll();
+        const response = await partnersAPI.getAll();
         setPartners(response.data.partners || []);
       } catch (apiError) {
         console.warn('API fetch failed, using fallback data:', apiError);
@@ -158,7 +158,7 @@ const Partners = () => {
             <div>
               <p className="text-sm font-medium text-gray-600">Total Earnings</p>
               <p className="text-2xl font-bold text-gray-900">
-                {apiUtils.formatCurrency(
+                {formatCurrency(
                   partners.reduce((sum, partner) => sum + partner.totalEarnings, 0),
                   'PKR'
                 )}
@@ -235,7 +235,7 @@ const Partners = () => {
                   </td>
                   <td>
                     <span className="text-sm font-semibold text-green-600">
-                      {apiUtils.formatCurrency(partner.totalEarnings, 'PKR')}
+                      {formatCurrency(partner.totalEarnings, 'PKR')}
                     </span>
                   </td>
                   <td>
@@ -245,7 +245,7 @@ const Partners = () => {
                   </td>
                   <td>
                     <span className="text-sm text-gray-600">
-                      {apiUtils.formatDate(partner.joinedAt)}
+                      {formatDate(partner.joinedAt)}
                     </span>
                   </td>
                   <td>

@@ -2,8 +2,7 @@
 export { default as AppleButton } from './AppleButton';
 export { default as AppleInput } from './AppleInput';
 export { default as AppleCard } from './AppleCard';
+export { default as AppleSearch } from './AppleSearch';
+export { default as AppleModal, AppleConfirmModal } from './AppleModal';
 export { default as AppleTable } from './AppleTable';
-export { default as AppleModal } from './AppleModal';
-export { AppleConfirmModal } from './AppleModal';
-export { default as AppleNotification } from './AppleNotification';
-export { useAppleNotification } from './AppleNotification';
+export { default as AppleNotification, useAppleNotification } from './AppleNotification';
